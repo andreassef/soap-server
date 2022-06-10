@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name = "soap-backend"
+   targetNamespace = "http://localhost:8001/wsdl"
+   xmlns="http://localhost:8001/wsdl"
+   xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" 
+   xmlns:soap = "http://schemas.xmlsoap.org/wsdl/soap/"
+   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+   xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<message name="setNumbers">
+  <part name="number1" type="xs:string"/>
+  <part name="number2" type="xs:string"/>
+  <part name="token" type="xs:string"/>
+</message>
+
+<message name="authenticateSchema">
+  <part name="login" type="xs:string"/>
+  <part name="password" type="xs:string"/>
+</message>
+
+<message name="authenticateResponse">
+  <part name="token" type="xs:string"/>
+</message>
+
+<message name="getSumResponse">
+  <part name="response" type="xs:integer"/>
+</message>
+
+<portType name="SumNumbers">
+  <operation name="HandleSum">
+    <input message="setNumbers"/>
+    <output message="getSumResponse"/>
+  </operation>
+  <operation name="authenticate">
+    <input message="authenticateSchema"/>
+    <output message="authenticateResponse"/>
+  </operation>
+</portType>
+
+<binding type="SumNumbers" name="SumNumbers2">
+   <soap:binding style="document"
+   transport="http://schemas.xmlsoap.org/soap/http" />
+   <operation>
+     <soap:operation soapAction="HandleSum"/>
+     <soap:operation soapAction="authenticate"/>
+     <input><soap:body use="literal"/></input>
+     <output><soap:body use="literal"/></output>
+  </operation>
+</binding>
+
+<service name = "MyService">
+      <documentation>WSDL File for MyService</documentation>
+      <port binding = "SumNumbers2" name = "SumNumbers">
+         <soap:address
+            location = "http://localhost:8001/wsdl" />
+      </port>
+</service>
+
+</definitions>
